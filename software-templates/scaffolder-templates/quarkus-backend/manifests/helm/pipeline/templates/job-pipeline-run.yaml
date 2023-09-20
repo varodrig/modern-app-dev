@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.app.name }}-run-job
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  selector: {}
+  template:
+    metadata:
+      name: {{ .Values.app.name }}-run-job
+    spec:
+      containers:
+        - name: frontend-pipeline-run-job
+          image: gcr.io/tekton-releases/dogfooding/tkn
+          command:
+          - /bin/sh
+          - -c
+          - |
+            tkn pipeline start {{ .Values.app.name }} --use-param-defaults -w name=shared-workspace,claimName={{ .Values.app.name }}-pipeline-pvc -w name=maven-settings -w name=maven-local-m2
+          env:
+            - name: HOME
+              value: /tekton/home
+      restartPolicy: Never
+      serviceAccountName: pipeline
