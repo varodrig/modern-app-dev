@@ -10,6 +10,7 @@ spec:
   template:
     metadata:
       name: {{ .Values.app.name }}-run-job
+      namespace: {{ .Values.app.namespace }}
     spec:
       containers:
         - name: {{ .Values.app.name }}-pipeline-run-job

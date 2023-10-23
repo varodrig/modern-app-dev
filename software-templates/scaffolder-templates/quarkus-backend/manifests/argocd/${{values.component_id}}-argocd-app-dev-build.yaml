@@ -3,7 +3,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ${{values.component_id}}-build
-  namespace: ${{values.namespace}}
+  namespace: rhdhub
   finalizers:
     - resources-finalizer.argocd.argoproj.io  
 spec:
